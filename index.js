@@ -5,7 +5,6 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
-require("../db");
 const Movie = require("./models/movies.models");
 
 app.use(express.json());
