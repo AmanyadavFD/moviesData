@@ -31,15 +31,15 @@ async function createMovie(data) {
     console.log(error);
   }
 }
-
 app.post("/movies", async (req, res) => {
   try {
-    const addMovie = await createMovie(req.body);
+    const newMovie = new Movie(req.body);
+    const savedMovie = await createMovie.save();
     res
       .status(201)
-      .json({ message: "Movie added Successfully.", addMovie: addMovie });
+      .json({ message: "Movie added successfully", movie: savedMovie });
   } catch (error) {
-    res.status(500).json({ error: "Failed to add Movie." });
+    res.status(500).json({ error: "Failed to add movie." });
   }
 });
 
