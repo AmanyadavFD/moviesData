@@ -24,27 +24,30 @@ async function readMovieByTitle(movieTitle) {
 }
 async function createMovie(data) {
   try {
-    const MovieData = new Movie(data);
-    const saveMovieData = await MovieData.save();
-    return saveMovieData;
+    const movieData = new Movie(data);
+    const savedMovieData = await movieData.save();
+    return savedMovieData;
   } catch (error) {
-    console.log(error);
+    throw new Error("Error saving the movie: " + error.message); // Pass the error back
   }
 }
 
 app.post("/movies", async (req, res) => {
   try {
-    const seedMovieData = await createMovie(req.body);
-    if (seedMovieData) {
+    const savedMovieData = await createMovie(req.body);
+    if (savedMovieData) {
       res.status(201).json({
-        message: "Book added successfully",
-        seedMovieData: seedMovieData,
+        message: "Movie added successfully",
+        movie: savedMovieData,
       });
     } else {
-      res.status(404).json({ error: "Failed to added Movie" });
+      res.status(400).json({ error: "Failed to add movie" });
     }
   } catch (error) {
-    res.status(505).json({ error: "Failed to added the Movie. " });
+    console.error(error.message); // Log the error
+    res
+      .status(500)
+      .json({ error: "Failed to add the movie: " + error.message });
   }
 });
 
