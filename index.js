@@ -31,15 +31,20 @@ async function createMovie(data) {
     console.log(error);
   }
 }
+
 app.post("/movies", async (req, res) => {
   try {
-    const newMovie = new Movie(req.body);
-    const savedMovie = await createMovie.save();
-    res
-      .status(201)
-      .json({ message: "Movie added successfully", movie: savedMovie });
+    const seedMovieData = await createMovie(req.body);
+    if (seedMovieData) {
+      res.status(201).json({
+        message: "Book added successfully",
+        seedMovieData: seedMovieData,
+      });
+    } else {
+      res.status(404).json({ error: "Failed to added Movie" });
+    }
   } catch (error) {
-    res.status(500).json({ error: "Failed to add movie." });
+    res.status(505).json({ error: "Failed to added the Movie. " });
   }
 });
 
