@@ -22,6 +22,27 @@ async function readMovieByTitle(movieTitle) {
     console.log(error);
   }
 }
+async function createMovie(data) {
+  try {
+    const MovieData = new Movie(data);
+    const saveMovieData = await MovieData.save();
+    return saveMovieData;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+app.post("/movies", async (req, res) => {
+  try {
+    const addMovie = await createMovie(req.body);
+    res
+      .status(201)
+      .json({ message: "Movie added Successfully.", addMovie: addMovie });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add Movie." });
+  }
+});
+
 app.get("/movies/:title", async (req, res) => {
   try {
     const movie = await readMovieByTitle(req.params.title);
